@@ -2,11 +2,22 @@ package edu.pjwstk.sri.lab2.dto;
 
 import java.io.Serializable;
 
+import javax.annotation.Resource;
+import javax.ejb.EJBContext;
+
 import edu.pjwstk.sri.lab2.model.Product;
 
 public class OrderItem implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Product product;
 	private Integer amount;
+	
+	@Resource 
+	private EJBContext context;
+	
 	public OrderItem(Product product,Integer amount) {
 		this.product = product;
 		this.amount = amount;

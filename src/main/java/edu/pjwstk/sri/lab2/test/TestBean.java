@@ -10,8 +10,6 @@ import javax.inject.Named;
 import edu.pjwstk.sri.lab2.dao.CategoryDao;
 import edu.pjwstk.sri.lab2.dao.ProductDao;
 import edu.pjwstk.sri.lab2.dto.Cart;
-import edu.pjwstk.sri.lab2.dto.Order;
-import edu.pjwstk.sri.lab2.dto.OrderItem;
 import edu.pjwstk.sri.lab2.model.Category;
 import edu.pjwstk.sri.lab2.model.Product;
 
@@ -25,23 +23,28 @@ public class TestBean implements Serializable {
 	@Inject
 	private ProductDao prodService ;
 	
+	@Inject
+	private Cart cart;
 	public TestBean() {
 	}
 	
 	public void test() {
-		List<Category> listAll = catService.utworzBudzik(20);
-		System.out.println(listAll);
+		//catService.utworzBudzik(20);
+		//List<Category> categories = catService.getCategories();
+		//System.out.println(categories);\
+		List<Product> listAllProduct = prodService.listAll(null, null);
+		System.out.println("dajana " +listAllProduct);
 		Product e = prodService.findById(2003L);
 		e.setStock(7);
 		prodService.update(e);
 		
-		List<Product> listAllProduct = prodService.listAll(null, null);
+		 listAllProduct = prodService.listAll(null, null);
 		System.out.println(listAllProduct);
 		for(Product p : listAllProduct) {
 			System.out.println(p.getId() + " "+ p.getName() + " " + p.getStock());
 		}
-		Cart cart = new Cart() ;
-		cart.addItem(prodService.findById(2003L), 5);
+		//Cart cart = new Cart() ;
+		cart.addItem(prodService.findById(2000L), 1);
 		cart.makeOrder();
 		
 	}

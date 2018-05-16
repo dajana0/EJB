@@ -29,7 +29,6 @@ import edu.pjwstk.sri.lab2.model.Product;
 /**
  * DAO for Category
  */
-//@Stateless
 @Singleton
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class CategoryDao {
@@ -38,9 +37,9 @@ public class CategoryDao {
 	
 	@Resource
     TimerService timerService;
+
+	private List<Category> categories;
 	
-//	@Resource
-//	private  UserTransaction tx;
 	 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public void create(Category entity)  {
 
@@ -70,18 +69,18 @@ public class CategoryDao {
 
 	}
 	 
-	 public List<Category> utworzBudzik(long duration) {
+	 public void utworzBudzik(long duration) {
+		 categories = listAll(null,null);
          long iloscsekund = duration* 1000;
          timerService.createTimer(iloscsekund, null);
-         return listAll(null,null);
+         //return listAll(null,null);
 
     }
 	 
-	 
 	 @Timeout
-     private List<Category> metodaCzasowa(Timer timer) {
-		 System.out.println(listAll(null,null));
-		 return listAll(null,null);
+     private void metodaCzasowa(Timer timer) {
+		 categories = listAll(null,null);
+		 //return listAll(null,null);
      }
 	 
 	 @Lock(LockType.READ)
@@ -98,5 +97,12 @@ public class CategoryDao {
 			findAllQuery.setMaxResults(maxResult);
 		}
 		return findAllQuery.getResultList();
+	}
+	 
+	public List<Category> getCategories() {
+		return categories;
+	}
+	public void setCategories(List<Category> categories) {
+		this.categories = categories;
 	}
 }

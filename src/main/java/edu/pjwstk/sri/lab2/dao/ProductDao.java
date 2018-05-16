@@ -26,9 +26,7 @@ import edu.pjwstk.sri.lab2.model.Product;
 @Stateless
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class ProductDao {
-	
-	  @Resource 
-	    private EJBContext context;
+
 	
 	@PersistenceContext(unitName = "sri2-persistence-unit")
 	private EntityManager em;
@@ -43,7 +41,7 @@ public class ProductDao {
 			em.remove(entity);
 		}
 	}
-	 @TransactionAttribute(TransactionAttributeType.NEVER)
+
 	public Product findById(Long id) {
 		return em.find(Product.class, id);
 	}
@@ -53,7 +51,7 @@ public class ProductDao {
 		return em.merge(entity);
 		
 	}
-
+	 
 	 @Lock(LockType.READ)
 	 @TransactionAttribute(TransactionAttributeType.NEVER)
 	public List<Product> listAll(Integer startPosition, Integer maxResult) {

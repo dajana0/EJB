@@ -1,5 +1,6 @@
 package edu.pjwstk.sri.lab2.dto;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,14 +16,14 @@ import edu.pjwstk.sri.lab2.dao.ProductDao;
 import edu.pjwstk.sri.lab2.model.Product;
 
 @Stateful
-public class Cart {
+public class Cart  {
 	
 	@Inject
     private ProductDao prodService;
 	
 	 @Resource
 	 private EJBContext context;
-	
+
 	private List<OrderItem> cartItems = new ArrayList<OrderItem>();
 
 	public List<OrderItem> getCartItems() {
@@ -45,17 +46,16 @@ public class Cart {
 		}
 	}
 	
-		public void makeOrder() {
-			 try {
-			 for(OrderItem oi : cartItems) {
-					Product prod_database = prodService.findById(oi.getProduct().getId());
-					prod_database.setStock(prod_database.getStock() - oi.getAmount());
-					prodService.update(prod_database);
-				}
-			 }catch(Throwable th){
-		            context.setRollbackOnly();
-		        }
-		}
-	
+	public void makeOrder() {
+		try {
+			for(OrderItem oi : getCartItems()) {
+				   Product prod_database = prodService.findById(oi.getProduct().getId());
+				   prod_database.setStock(prod_database.getStock() - oi.getAmount());
+				   prodService.update(prod_database);
+			   }
+			}catch(Throwable th){
+				   context.setRollbackOnly();
+			   }
+	}
 	
 }
