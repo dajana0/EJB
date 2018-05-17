@@ -29,9 +29,7 @@ public class TestBean implements Serializable {
 	}
 	
 	public void test() {
-		//catService.utworzBudzik(20);
-		//List<Category> categories = catService.getCategories();
-		//System.out.println(categories);\
+
 		List<Product> listAllProduct = prodService.listAll(null, null);
 		System.out.println("dajana " +listAllProduct);
 		Product e = prodService.findById(2003L);
@@ -43,10 +41,19 @@ public class TestBean implements Serializable {
 		for(Product p : listAllProduct) {
 			System.out.println(p.getId() + " "+ p.getName() + " " + p.getStock());
 		}
-		//Cart cart = new Cart() ;
+
 		cart.addItem(prodService.findById(2000L), 1);
+		cart.addItem(prodService.findById(2003L), 8);
+		try {
 		cart.makeOrder();
-		
+		}catch(Throwable er) {
+			System.out.println("------------------------Wycofano----------------------");
+		}
+		 listAllProduct = prodService.listAll(null, null);
+			System.out.println(listAllProduct);
+			for(Product p : listAllProduct) {
+				System.out.println(p.getId() + " "+ p.getName() + " " + p.getStock());
+			}
 	}
 	
 

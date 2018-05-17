@@ -14,9 +14,7 @@ public class OrderItem implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Product product;
 	private Integer amount;
-	
-	@Resource 
-	private EJBContext context;
+
 	
 	public OrderItem(Product product,Integer amount) {
 		this.product = product;

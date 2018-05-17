@@ -26,6 +26,7 @@ import javax.transaction.*;
 
 import edu.pjwstk.sri.lab2.model.Category;
 import edu.pjwstk.sri.lab2.model.Product;
+
 /**
  * DAO for Category
  */
@@ -34,62 +35,48 @@ import edu.pjwstk.sri.lab2.model.Product;
 public class CategoryDao {
 	@PersistenceContext(unitName = "sri2-persistence-unit")
 	private EntityManager em;
-	
-	@Resource
-    TimerService timerService;
 
 	private List<Category> categories;
-	
-	 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-	public void create(Category entity)  {
 
-			em.persist(entity);
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+	public void create(Category entity) {
 
-		
+		em.persist(entity);
+
 	}
-	 @TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public void deleteById(Long id)  {
+
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
+	public void deleteById(Long id) {
 		Category entity = em.find(Category.class, id);
 		if (entity != null) {
 			em.remove(entity);
 
 		}
 	}
-	 
-	 @TransactionAttribute(TransactionAttributeType.NEVER)
-	 @Lock(LockType.READ)
+
+	@TransactionAttribute(TransactionAttributeType.NEVER)
+	@Lock(LockType.READ)
 	public Category findById(Long id) {
 		return em.find(Category.class, id);
 	}
-	 @TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public Category update(Category entity)  {
 
-			return em.merge(entity);
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
+	public Category update(Category entity) {
 
-
+		return em.merge(entity);
 	}
-	 
-	 public void utworzBudzik(long duration) {
-		 categories = listAll(null,null);
-         long iloscsekund = duration* 1000;
-         timerService.createTimer(iloscsekund, null);
-         //return listAll(null,null);
 
-    }
-	 
-	 @Timeout
-     private void metodaCzasowa(Timer timer) {
-		 categories = listAll(null,null);
-		 //return listAll(null,null);
-     }
-	 
-	 @Lock(LockType.READ)
-	 @TransactionAttribute(TransactionAttributeType.NEVER)
+	@Schedule(second = "10", minute = "*", hour = "*")
+	private void metodaCzasowa(Timer timer) {
+		categories = listAll(null, null);
+	}
+
+	@Lock(LockType.READ)
+	@TransactionAttribute(TransactionAttributeType.NEVER)
 	private List<Category> listAll(Integer startPosition, Integer maxResult) {
-		TypedQuery<Category> findAllQuery = em
-				.createQuery(
-						"SELECT DISTINCT c FROM Category c LEFT JOIN FETCH c.parentCategory LEFT JOIN FETCH c.childCategories ORDER BY c.id",
-						Category.class);
+		TypedQuery<Category> findAllQuery = em.createQuery(
+				"SELECT DISTINCT c FROM Category c LEFT JOIN FETCH c.parentCategory LEFT JOIN FETCH c.childCategories ORDER BY c.id",
+				Category.class);
 		if (startPosition != null) {
 			findAllQuery.setFirstResult(startPosition);
 		}
@@ -98,10 +85,11 @@ public class CategoryDao {
 		}
 		return findAllQuery.getResultList();
 	}
-	 
+
 	public List<Category> getCategories() {
 		return categories;
 	}
+
 	public void setCategories(List<Category> categories) {
 		this.categories = categories;
 	}
