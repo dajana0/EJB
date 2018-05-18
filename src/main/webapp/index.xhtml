@@ -7,7 +7,9 @@
 <h:body>
 	<h:form>
 		<h:outputText value="Naciśnij guzik" />
-		<h:commandButton action="#{testBean.test()}" value="Test" />
+		<h:commandButton action="#{testBean.test()}" value="Zamówienie nieudane" />
+		<h:commandButton action="#{testBean.prod1()}" value="Zamówienie udane" />
+		<h:commandButton action="#{testBean.produkty()}" value="Produkty w bazie" />
 	</h:form>
 </h:body>
 </html>
